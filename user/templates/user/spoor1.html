@@ -1,0 +1,406 @@
+{% extends 'user/index.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block style_references %}
+<!-- <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock%}
+{% block content %}
+<style>
+    #map {
+        width: 100%;
+
+    }
+</style>
+<div class="py-2 text-right mx-4">
+    <a href="/api/GenerateReport/?case_number={{case_number}}">
+        <button type="button" id="download_button" style="visibility:hidden;" class="btn btn-primary">Download
+        </button></a>
+</div>
+<div id="content">
+    <div class="container-fluid">
+
+        <div class="row" id="outer_container">
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block script_references %}
+<!-- <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
+<script>
+    let outer = document.getElementById("outer_container")
+    async function get_ip() {
+        url = `/api/getip/?domain={{domain}}&case_number={{case_number}}`
+        let ip_address = await fetch(url)
+        ip_address = await ip_address.json()
+        toBeAdded = `<div class="col-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Ip Address</h6>
+                            </div>
+                            <div class="card-body">
+                                ${ip_address.ip_address}
+                            </div>
+                        </div>
+                        </div>`
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_whois(ip_address.ip_address)
+    }
+    async function get_whois(ip_address) {
+        url = `/api/whois/?ip_address=${ip_address}&case_number={{case_number}}`
+        let whois = await fetch(url)
+        whois = await whois.json()
+        if (whois.res.error == true) {
+            toBeAdded = `<div class="col-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Domain Details</h6>
+                            </div>
+                            <div class="card-body" style="color:red">
+                                Sorry details could not be fetched
+                            </div>
+                        </div>
+                        </div>`
+            outer.insertAdjacentHTML("beforeend", toBeAdded)
+        }
+        else {
+            toBeAdded = `
+            <div class="col-6">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Domain Details</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="max-height:500px;";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+
+            for (let key in whois.res) {
+                toBeAdded += `<tr>
+                                <td>${key}</td>
+                                <td>${whois.res[key]}</td>                             
+                            </tr>`
+            }
+            toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>
+                        <div class="col-6" >
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Map</h6>
+                            </div>
+                            <div class="card-body" id="map" style="height: 500px;">
+                            </div>
+                        </div>
+                        </div>
+                        `
+
+            outer.insertAdjacentHTML("beforeend", toBeAdded)
+            let location = { lat: whois.res["latitude"], lng: whois.res["longitude"] };
+            let map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: location,
+            });
+            let marker = new google.maps.Marker({
+                position: location,
+                map: map,
+            });
+
+
+
+        }
+        get_nmap_port(ip_address)
+    }
+    async function get_ssl_cert() {
+        url = `/api/ssl_certificate/?domain={{domain}}&case_number={{case_number}}`
+        let ssl_certificate = await fetch(url)
+        ssl_certificate = await ssl_certificate.json()
+        toBeAdded = `
+            <div class="col-12">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">SSL Validation</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="max-height:500px";>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Logged At</th>
+                                                <th>Not Before</th>
+                                                <th>Not After</th>
+                                                <th>Comman Name</th>
+                                                <th>Issuer Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+
+        for (let key in ssl_certificate.res["ssl_certificate"]) {
+            toBeAdded += `<tr>
+                                <td>${ssl_certificate.res["ssl_certificate"][key]["logged_at"]}</td>
+                                <td>${ssl_certificate.res["ssl_certificate"][key]["not_before"]}</td>
+                                <td>${ssl_certificate.res["ssl_certificate"][key]["not_after"]}</td>
+                                <td>${ssl_certificate.res["ssl_certificate"][key]["name"]}</td>
+                                <td>${ssl_certificate.res["ssl_certificate"][key]["ca"]["name"]}</td>                               
+                            </tr>`
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+
+
+        document.getElementById('download_button').style.visibility = 'visible';
+
+    }
+    async function get_wappalyzer() {
+        url = `/api/wappalyzer/?url={{url}}&case_number={{case_number}}`
+        let wappalyzer = await fetch(url)
+        wappalyzer = await wappalyzer.json()
+        toBeAdded = `<div class="col-6">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Tech Stack</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="max-height:600px";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Versions</th>
+                                                <th>Category</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+
+        for (let key in wappalyzer.res) {
+            toBeAdded += `<tr>
+                                <td>${key}</td>
+                                <td>${wappalyzer.res[key].versions}</td>
+                                <td>${wappalyzer.res[key].categories}</td>
+                                
+                            </tr>`
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div>
+                        </div></div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_subdomain_enum()
+    }
+    async function get_nmap_port(ip_address) {
+        url = `/api/nmap_port/?ip_address=${ip_address}&case_number={{case_number}}`
+        let nmap_port = await fetch(url)
+        nmap_port = await nmap_port.json()
+        console.log(JSON.stringify(nmap_port))
+
+        toBeAdded = `
+            <div class="col-6">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Port Status</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="height:300px";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Port Number</th>
+                                                <th>State</th>
+                                                <th>Product</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+        f_key = Object.keys(nmap_port.res)[0]
+        // console.log(typeof(nmap_port.res[f_key]["ports"]))
+        for (let key in nmap_port.res[f_key]["ports"]) {
+            console.log("kerasdf" + key)
+            toBeAdded += `<tr>
+                                <td>${nmap_port.res[f_key]["ports"][key]["portid"]}</td>
+                                <td>${nmap_port.res[f_key]["ports"][key]["state"]}</td>
+                                <td>${nmap_port.res[f_key]["ports"][key]["service"]["product"]}</td>
+                                
+                            </tr>`
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_os_scan(ip_address)
+    }
+    async function get_dns_enum() {
+        url = `/api/dns_enum/?domain={{domain}}&case_number={{case_number}}`
+        let ssl_certificate = await fetch(url)
+        ssl_certificate = await ssl_certificate.json()
+        toBeAdded = `
+            <div class="col-12">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Server Status</h6>
+                            </div>
+                            <div class="overflow-auto card-body";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Server Type</th>
+                                                <th>Respected Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+
+        for (let key in ssl_certificate.res) {
+            toBeAdded += `<tr>
+                                <td>${key}</td>
+                                <td>${ssl_certificate.res[key]}</td>
+                                
+                            </tr>`
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_ssl_cert()
+    }
+    async function get_dns_family() {
+        url = `/api/dns_for_family/?domain={{domain}}&case_number={{case_number}}`
+        let dns_for_family = await fetch(url)
+        dns_for_family = await dns_for_family.json()
+        toBeAdded = `<div class="col-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Is it Adult content webpage</h6>
+                            </div>
+                            <div class="card-body">
+                                ${dns_for_family.result["kct.ac.in"]}
+                            </div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_ip()
+    }
+    async function get_subdomain_enum() {
+        url = `/api/subdomain_enum/?domain={{domain}}&case_number={{case_number}}`
+        let subdomain_enum = await fetch(url)
+        subdomain_enum = await subdomain_enum.json()
+        toBeAdded = `
+            <div class="col-6">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Related Subdomains</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="max-height:600px";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Subdomains</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+
+        for (let key in subdomain_enum.res["subdomain"]) {
+            toBeAdded += `<tr>
+                                <td>${subdomain_enum.res["subdomain"][key]}</td>                               
+                            </tr>`
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_dns_enum()
+    }
+
+    async function get_os_scan(ip_address) {
+        url = `/api/os_scan/?ip_address=r&case_number={{case_number}}`
+        let os_scan = await fetch(url)
+        os_scan = await os_scan.json()
+        console.log(os_scan.res["164.100.134.104"]["osmatch"])
+        toBeAdded = `
+            <div class="col-6">
+            <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Os Scan</h6>
+                            </div>
+                            <div class="overflow-auto card-body" style="height:300px";
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Accuracy</th>
+                                                <th>CPE</th>
+                                                <th>Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `
+        for (let i = 0; i < 3; i++) {
+            toBeAdded += `<tr>
+                    <td>${os_scan.res["164.100.134.104"]["osmatch"][i]["accuracy"]}%</td>
+                    <td>${os_scan.res["164.100.134.104"]["osmatch"][i]["cpe"]}</td>
+                    <td>${os_scan.res["164.100.134.104"]["osmatch"][i]["name"]}</td>
+                    </tr>
+                           `
+        }
+        toBeAdded += `
+            </tbody>
+            </table>
+            </div></div></div>
+                        </div>
+                        </div>`
+
+        outer.insertAdjacentHTML("beforeend", toBeAdded)
+        get_wappalyzer()
+    }
+    get_dns_family()
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeyB29f2HbX747Kqlb34njGl5LDvv5awE&callback=initMap"></script>
+{% endblock %}

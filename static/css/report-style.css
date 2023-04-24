@@ -1,0 +1,139 @@
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background-color: #f8f7ff;
+}
+
+.navbar {
+  background-color: #1f2041;
+  /* color: #2c363f; */
+  color: white;
+  text-align: center;
+}
+
+.navbar:hover {
+  background-color: 4a6fa5;
+  /* color: #2c363f; */
+  text-align: center;
+  font-size: large;
+  transition: 0.5s;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #1f2041;
+  color: white;
+  text-align: center;
+}
+
+footer a {
+  color: white;
+  text-align: center;
+}
+
+footer a:hover {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+
+
+.social a {
+  margin: 0 15px;
+}
+
+.copyright {
+font-size: larger;
+margin: 5px 10px;
+padding: 10px 0px;
+}
+
+/* .video-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 70%;
+	overflow: hidden;
+	background: var(--primary-color) url('../') no-repeat center center/cover;
+    opacity: 0.8;
+}    */
+
+.content {
+	z-index: 2;
+    /* background-image: url(/static/images/bg.jpg); */
+}
+
+h1 {
+	font-weight: 300;
+	font-size: 60px;
+	line-height: 1.2;
+	margin-bottom: 15px;
+    text-align: center;
+}
+
+h2 {
+	font-weight: 200;
+	font-size: 30px;
+	line-height: 1.2;
+	margin-bottom: 15px;
+    text-align: center;
+    justify-items: start;
+}
+
+h3 {
+	font-weight: 200;
+	font-size: 40px;
+	line-height: 1.2;
+	margin-bottom: 15px;
+    text-align: center;
+}
+
+#about {
+	padding: 40px;
+	text-align: center;
+}
+
+#about p {
+	font-size: 1.2rem;
+	max-width: 600px;
+	margin: auto;
+}
+
+#about h2 {
+	margin: 30px 0;
+	color: var(--primary-color);
+}   
+
+
+.btndiv a{
+    /* float: center;	 */
+	padding: 15px 30px;
+    background-color: #1f2041;
+    color: white;
+    border-radius: 5px;
+	border: solid #1f2041 1px;
+	margin-top: 25px;	
+    align-items: center;
+    position: absolute;
+    margin-left: 25%;
+    text-decoration: none;
+}
+
+.btndiv a:hover {
+	transform: scale(1.2);
+    transition: 1s;
+    color: white;
+}
+
+.btndiv a:visited {
+    transition: 1s;
+    background-color: #1f2041;
+    color: white;
+}

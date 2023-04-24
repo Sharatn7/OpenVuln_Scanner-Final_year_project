@@ -1,0 +1,19 @@
+Port Status
+If other than necessary ports are opened:
+•	Most of the services running in the server are open to all for enumeration. It is recommended to update the services running on the server and it is recommended to use CDN for enhanced protection. 
+•	Try to filter the requests that are probing the port for their status.
+
+
+Tech Stack:
+General
+•	It is recommended to use latest version of plugins in order to prevent any attacks.
+
+Subdomain:
+•	We can scrap the subdomains which have confidential sites like admin login page, cpanel page, etc.
+•	It is necessary to update the robots file which tells search engine crawlers which URLs the crawler can access on your site.
+•	Robots files should be more specific and descriptive to user agents.
+
+
+SSL Certificate:
+Domain and SSL are going to expire in a few months. Renew the licence in order not
+to lose the domain.

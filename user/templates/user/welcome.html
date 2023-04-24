@@ -1,0 +1,166 @@
+{% extends 'user/index.html' %}
+{%block content%}
+{% load static %}
+
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Include Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+  
+    .scan-content,.mail-content,.malware-content,.image-content{
+      margin-top: 50px;
+      line-height: 25px;
+    }
+  
+
+    .welcome-content{
+      margin-top: 50px;
+    }
+  .image-content{
+    margin-bottom: 50px;
+  }
+
+  a, a:hover, a:link, a:visited, a:active {
+    text-decoration: none;
+    color: black;
+  }
+  img{
+    mix-blend-mode: multiply;
+  }
+
+</style>
+<!-- Welcome Content -->
+<div class="container welcome-content">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Make your OSINT Process Easier</h1>
+      <p>All custom OSINT tools can be used entirely free of charge. We do not actively monitor what information you type into our scripts. However, we use website analysis programs to make our website function as well as possible. Our platform is designed to help individuals and organizations gather information from various sources on the internet. Our tools are carefully crafted to provide you with accurate and reliable results, making it easier for you to make informed decisions.</p>
+      <a href="scan/" class="btn btn-primary my-3 text-white">Let's Go!</a>
+      
+    </div>
+    <div class="col-md-4">
+      <img class="card-img-top" style="width: 100%;height: 100%;" src={% static 'images/investigate.svg'%} alt="Card image cap">
+    </div>
+  </div>
+</div>
+<!-- Welcome Content Ends -->
+
+<!-- Scan Content -->
+<a href="scan/" target="_blank">
+<div class="scan-content container ">
+  <div class="row">
+    <div class="col-md-4">
+      <img class="card-img-top" style="width: 100%;height: 100%;" src={% static 'images/scan.svg'%} alt="Card image cap">
+      
+    </div>
+    <div class="col-md-8">
+      <h1>Website Analysis</h1>
+      <p>Open Source Intelligence (OSINT) to gather information about websites and their online presence. Our tool allows you to gain valuable insights into a website's domain, hosting information, IP address, SSL certificate, and more. With this information, you can make informed decisions about the security, trustworthiness, and reputation of the website. Our tool also collects information about a website's domain, including its registration date, expiration date, and registrar information. This information can help you determine the website's credibility and potential risks.</p>
+
+    </div>
+  </div>
+<!-- <a href="scan/" class="btn btn-primary mx-auto ">Let's Go!</a> -->
+</div>
+</a>
+<!-- Scan Content Ends -->
+
+
+<!-- Mail Header Content -->
+<a href="email_header_analyse" target="_blank">
+<div class="container mail-content">
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Email Header Analysis</h1>
+      <p>Our tool provides you with detailed information about the email header, including the sender's IP address, mail server information, and more. With this information, you can determine if the email is legitimate or if it may be a phishing attempt or spam. IP address of the sender to provide you with information about their geographic location, ISP, and more. This information can help you determine if the email is coming from a legitimate source or if it may be a phishing attempt. Information about the mail server used to send the email, including the server name, type, and version. This information can help you identify potential security vulnerabilities and take appropriate action.</p>
+      
+    </div>
+    <div class="col-md-4">
+      <img class="card-img-top" style="width: 100%;height: 100%;" src={% static 'images/mail.png'%} alt="Card image cap">
+    </div>
+  </div>
+<!-- <a href="scan/" class="btn btn-primary mx-auto ">Let's Go!</a> -->
+</div>
+</a>
+
+<!-- Mail Header Content Ends -->
+
+
+<!-- Malware Analysis Content -->
+<a href="malware_analysis" target="_blank">
+<div class="malware-content container ">
+  <div class="row">
+    <div class="col-md-4">
+      <img class="card-img-top" style="width: 100%;height: 100%;" src={% static 'images/malware.png'%} alt="Card image cap">
+      
+    </div>
+    <div class="col-md-8">
+      <h1>Malware Analysis</h1>
+      <p>Our tool uses advanced algorithms and techniques to analyze suspicious files and provide you with detailed information about potential malware infections. With our tool, you can detect and remove malware from your computer or network and ensure that your system is secure. Our tool uses signature-based detection to identify known malware threats and provide you with information about their behavior. This information can help you take appropriate action to remove the malware from your system.</p>
+
+    </div>
+  </div>
+<!-- <a href="scan/" class="btn btn-primary mx-auto ">Let's Go!</a> -->
+</div>
+</a>
+<!-- Malware Analysis Content Ends -->
+
+
+<!-- Image Content Starts -->
+<a href="image_analysis/" target="_blank">
+<div class="container image-content" >
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Image Analysis</h1>
+      <p>Our tool uses the Exchangeable Image File Format (EXIF) to extract metadata from your images and provide you with detailed information about them. Our tool uses the GPS information embedded in the image metadata to determine the location where the image was captured. This information can help you determine if an image was captured in a specific location, such as a crime scene or restricted area. Our image metadata analysis tool can detect if an image has been manipulated or tampered with by checking for changes to the date, time, or metadata. It also identifies the device used to capture the image based on the EXIF data, which can help identify the source of the image and take appropriate action if needed.
+      </p>
+      
+    </div>
+    <div class="col-md-4">
+      <img class="card-img-top" style="width: 100%;height: 100%;" src={% static 'images/upload1.jpg'%} alt="Card image cap">
+    </div>
+  </div>
+<!-- <a href="scan/" class="btn btn-primary mx-auto ">Let's Go!</a> -->
+</div>
+</a>
+<!-- Image Content Starts Ends-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{%endblock%}

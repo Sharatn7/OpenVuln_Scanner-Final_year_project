@@ -1,0 +1,74 @@
+{% extends 'user/index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <style>
+    input[type="text"]{
+        display: block;
+        width: 97%;
+        margin: 15px;
+    }
+    label{
+        display: block;
+        margin: 15px;
+        text-align: left;
+    }
+
+    </style>
+
+<div class="text">
+
+    {% if error_message %}
+    <h2>{{error_message}}</h2>
+    {%endif%}
+    </div>
+
+<div style="display: flex;">
+<div class="container" style="text-align: center; width: 50%;" >
+  
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Scan</h6>   
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="display:block ; ">
+            <form action="" name="form1" id="form1" method="post">
+                {% csrf_token %}
+                <label for="creation_case_number">Case Number*</label>
+                <input type="text" name="creation_case_number" maxlength="5" class="textinput textInput" required="" id="creation_case_number">
+                <label for="creation_domain">Domain*</label>
+                <input type="text" name="creation_domain"  class="textinput textInput" required="" id="creation_domain">
+                <label for="creation_link">Link*</label>
+                <input type="text" name="creation_link"  class="textinput textInput" required="" id="creation_link">
+                <button type="submit" name="form1_submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" style="text-align: center; width: 50%;" >
+    
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Search Cases </h6>   
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="display:block ;">
+            <form action="" name="form2" id="form2" method="post" >
+                {% csrf_token %}
+                <label for="search_case_number">Case Number*</label>
+                <input type="text" name="search_case_number" maxlength="5" class="textinput textInput" required="" id="search_case_number">
+                <button type="submit" name="form2_submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'user/index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <style>
+    input[type="text"]{
+        display: block;
+        width: 97%;
+        margin: 15px;
+    }
+    label{
+        display: block;
+        margin: 15px;
+        text-align: left;
+    }
+
+    </style>
+
+ 
+
+<div style="display: flex;">
+<div class="container" style="text-align: center; width: 50%;" >
+    <div class="text">
+
+        {% if creationForm.errors %}
+        <ul>
+        {% for field, errors in creationForm.errors.items %}
+        <li>{{ field }}:</li>
+        <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        </div>
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Scan</h6>   
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="display:block ; ">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ creationForm|crispy }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" style="text-align: center; width: 50%;" >
+    <div class="text">
+
+        {% if searchForm.errors %}
+        <ul>
+        {% for field, errors in searchForm.errors.items %}
+        <li>{{ field }}:</li>
+        <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        </div>
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Search Cases </h6>   
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="display:block ;">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ searchForm|crispy }}
+
+                <!-- <input type="text" name="case_number" maxlength="5" class="textinput textInput" required="" id="id_case_number"> -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'user/index.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<style>
+    input[type="text"] {
+        /* display: block; */
+        width: 68vw;
+        margin: 15px;
+    }
+
+    label {
+        display: block;
+        margin: 15px;
+        text-align: left;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="container" style="text-align: center;">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Image Analyse</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body" style="display:block ;">
+            <form action="" method="post" enctype='multipart/form-data'>
+            
+                {% csrf_token %}
+                <label for="id_image_file" id="lable" style="object-fit: contain;"><img src={% static 'images/upload.svg'%} alt="Upload"></label>
+                {{form|crispy}}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <style>
+
+                #lable {
+                  display: block;
+                  width: 100%;
+                  height: 400px;  
+            
+                }
+
+
+                #lable img{
+                  display: block;
+                  width: 100%;
+                  height: 100%;  
+                  margin-left: auto;
+                  margin-right: auto;
+                }
+
+                input[type="image"] {
+                  
+                  display: block;
+                  width: 100px;
+                  height: 100px;
+                  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+                  
+                }
+              </style>
+        </div>
+    </div>
+</div>
+{% if exif_data.is_true %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{exif_data.FileName}}</td>
+                                </tr>
+                                <tr>
+                                    <td>DateTime</td>
+                                    <td>{{exif_data.DateTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Make</td>
+                                    <td>{{exif_data.Make}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Model</td>
+                                    <td>{{exif_data.Model}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>GPS Info</td>
+                                    <td>{{exif_data.GPSInfo}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Latitude</td>
+                                    <td>{{exif_data.latitude}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Longitude</td>
+                                    <td>{{exif_data.longitude}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Locate</td>
+                                    <a href="{{exif_data.map_link}}"></a><td>{{exif_data.map_link}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Image Height</td>
+                                    <td>{{exif_data.ImageHeight}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Image Width</td>
+                                    <td>{{exif_data.ImageWidth}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Image Format</td>
+                                    <td>{{exif_data.ImageFormat}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Is Animated</td>
+                                    <td>{{exif_data.IsAnimated}}</td>
+                                </tr>
+                             
+                            </tbody>
+                            <!-- <tbody>
+
+                                {% if exif_data %}
+                                <ul>
+                                    {% for key, value in my_dict.items %}
+                                    <td>{{ key }}</td> 
+                                    <td>{{ value }}</td>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                <p>The dictionary is empty.</p>
+                                {% endif %}
+
+                            </tbody> -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+{% endblock %}

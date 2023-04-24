@@ -1,0 +1,302 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>OpenVuln Scanner</title>
+
+    <!-- Custom fonts for this template-->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet" />
+
+    <link type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css" rel="stylesheet" />
+    <link type="text/css" href="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
+
+
+    <!-- Custom styles for this template-->
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <!-- Custom styles for this template-->
+
+    <!-- <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.3/css/sb-admin-2.min.css" integrity="sha512-RIG2KoKRs0GLkvl0goS0cdkTgQ3mOiF/jupXuBsMvyB3ITFpTJLnBu59eE+0R39bxDQKo2dsatA5CwHeIKVFcw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    {% block style_references %}
+    {% endblock style_references %}
+
+</head>
+
+<body id="page-top">
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script>
+
+
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <script src="https://unpkg.com/htmx.org@1.6.1"
+            integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW"
+            crossorigin="anonymous"></script>
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" >
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'dashboard' %}">
+                <div class="sidebar-brand-text mx-3">OpenVuln Scanner</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0" />
+
+            <!-- Nav Item - Dashboard -->
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'scan' %}">
+                    <i class="fas fa-search"></i>
+                    <span>Scan</span>
+                </a>
+            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider" />
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'email-header-analyse' %}">
+                    <i class="fas fa-fw fa-table" aria-hidden="true"></i>
+                    <span>Email Header Analyse</span>
+                </a>
+            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider" />
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'malware-analysis' %}">
+                <i class="fas fa-fw fa-bug" aria-hidden="true"></i>
+                <span>Malware Analysis</span>
+            </a>        
+        </li>
+
+            <!-- Divider -->
+            <!-- Divider -->
+            <hr class="sidebar-divider" />
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'image_analysis' %}">
+                    <i class="fas fa-fw fa-image" aria-hidden="true"></i>
+                    
+                    <span>Image Analysis</span>
+                </a>
+            </li>
+            
+            <!-- Divider -->
+
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper"  class="d-flex flex-column" style="text-align: justify;" >
+            <!-- Main Content -->
+            <div id="content" style="min-height: 90vh;">
+                <!-- Topbar -->
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                  <!-- Sidebar Toggle (Topbar) -->
+                  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                      <i class="fa fa-bars"></i>
+                  </button>
+
+                    <marquee  direction="left">Welcome to OpenVuln Scanner! The one-stop destination for Open Source Intelligence </marquee>
+
+
+
+                </nav>
+                <!-- End of Topbar -->
+
+
+                <!-- Begin Page Content -->
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+
+                {% block content %}
+
+                {% endblock content %}
+                <!-- End of Main Content -->
+            </div>
+            <div>
+              <hr>
+                <!-- Footer -->
+    <footer class="text-center text-lg-start bg-light  text-black footer-custom" >
+        <!-- Section: Links  -->
+        <section >
+          <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+              
+              <!-- Grid column -->
+              <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                <!-- Content -->
+                <h6 class="text-uppercase fw-bold mb-4">
+                  Open VulnScanner
+                </h6>
+                <p>
+                    All custom OSINT tools can be used entirely free of charge. We do not actively monitor what information you type into our scripts.
+                </p>
+              </div>
+              
+              <!-- Grid column -->
+              
+              <!-- Grid column -->
+        <!-- <div class="row">
+
+            <h6 class="text-uppercase fw-bold mb-4">Members</h6>
+        </div> -->
+        <!-- <div class="row "> -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+                <!-- Links -->
+                <h6 class="text-uppercase fw-bold mb-4">
+                    Rajheshwar V
+                </h6>
+                <p>
+                    <i class="fab fa-linkedin"></i>
+                  <a href="https://www.linkedin.com/in/rajheshwar-v-78094421b/" target="_blank" class="text-reset">LinkedIn</a>
+                </p>
+                <p>
+                    <i class="fab fa-github"></i                    >
+                  <a href="https://github.com/Rajheshwar-V" class="text-reset" target="_blank">Github</a>
+                </p>
+                <p>
+                    <i class="fas fa-envelope"></i>
+                  <a href="mailto: rajheshwar02@gmail.com" class="text-reset" target="_blank">Mail</a>
+                </p>
+                
+              </div>
+              <!-- Grid column -->
+      
+              <!-- Grid column -->
+              <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                <!-- Links -->
+                <h6 class="text-uppercase fw-bold mb-4">
+                    Sharat N
+                </h6>
+                <p>
+                    <i class="fab fa-linkedin"></i>
+                  <a href="https://www.linkedin.com/in/sharat-n-93b028196/" class="text-reset" target="_blank">LinkedIn</a>
+                </p>
+                <p>
+                    <i class="fab fa-github"></i>
+                  <a href="https://github.com/Sharatn7" class="text-reset" target="_blank">Github</a>
+                </p>
+                <p>
+                    <i class="fas fa-envelope"></i>
+                  <a href="mailto: sarathn08@gmail.com" class="text-reset" target="_blank">Mail</a>
+                </p>
+              </div>
+              <!-- Grid column -->
+      
+              <!-- Grid column -->
+              <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                <!-- Links -->
+                <h6 class="text-uppercase fw-bold mb-4">Vishal S</h6>
+
+                <p>
+                    <i class="fab fa-linkedin"></i>
+                  <a href="https://www.linkedin.com/in/vishal-srikanth-04986519b/" class="text-reset" target="_blank">LinkedIn</a>
+                </p>
+                <p>
+                    <i class="fab fa-github"></i>
+                  <a href="#" class="text-reset" target="_blank">Github</a>
+                </p>
+                <p>
+                    <i class="fas fa-envelope"></i>
+                  <a href="mailto: rajheshwar02@gmail.com" class="text-reset" target="_blank">Mail</a>
+                </p>
+
+              </div>
+              <!-- Grid column -->
+            </div>
+            <!-- </div> -->
+            <!-- Grid row -->
+         </div>
+        
+        </section>
+        <!-- Section: Links  -->
+      
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+          © 2023 
+          <a class="text-reset fw-bold" href="#">Open VulnScanner</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+  <!-- Footer -->
+
+
+
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        
+    </div>
+
+ <!-- Bootstrap core JavaScript-->
+ <!-- <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/js/bootstrap.bundle.min.js" integrity="sha512-iceXjjbmB2rwoX93Ka6HAHP+B76IY1z0o3h+N1PeDtRSsyeetU3/0QKJqGyPJcX63zysNehggFwMC/bi7dvMig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <!-- Core plugin JavaScript-->
+ <!-- <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+ <!-- Custom scripts for all pages-->
+ <!-- <script src="{% static 'js/sb-admin-2.min.js' %}"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.3/js/sb-admin-2.min.js" integrity="sha512-COtY6/Rv4GyQdDShOyay/0YI4ePJ7QeKwtJIOCQ3RNE32WOPI4IYxq6Iz5JWcQpnylt/20KBvqEROZTEj/Hopw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+ <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+ <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
+ <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
+ <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+ <script type="text/javascript"
+     src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
+ <script type="text/javascript"
+     src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+ <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+ {% block script_references %}
+
+ {% endblock script_references %}
+
+
+</body>
+
+</html>
